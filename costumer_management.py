@@ -1,20 +1,18 @@
 import json
 import os
 
-def customer_load(customer_id):
-    # Define the path to the "data/customers" folder
-    data_folder = os.path.join(os.path.dirname(__file__), 'data', 'customers')
 
-    # Construct the JSON file path based on the customer ID
-    json_file_path = os.path.join(data_folder, f'customer{customer_id}.json')
+def customer_load(customer_number):
+    data_folder = 'data/customers'
+    customer_file = os.path.join(data_folder, f"{customer_number}.json")
 
-    if os.path.exists(json_file_path):
-        # Load customer data from the JSON file
-        with open(json_file_path, 'r') as f:
-            customer_data = json.load(f)
-            return customer_data
-    else:
-        return None  # Return None if customer data file doesn't exist
+    if not os.path.exists(customer_file):
+        return None  # Return None if the file doesn't exist
+
+    with open(customer_file, 'r') as file:
+        customer_data = json.load(file)
+
+    return customer_data
 
 
 def customer_edit(customer_id, data_name, new_value):

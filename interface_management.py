@@ -1,3 +1,4 @@
+import pprint
 import tkinter as tkinter
 from tkinter import *
 import customtkinter
@@ -17,7 +18,8 @@ def new():
     pass
 
 def edit():
-    pass
+    json = cust.customer_load(1)
+    pprint.pprint(json)
 
 
 class MyFrame(customtkinter.CTkFrame):
