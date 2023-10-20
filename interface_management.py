@@ -5,21 +5,28 @@ import customtkinter
 import costumer_management as cust
 
 customtkinter.set_appearance_mode("light")
-customtkinter.set_default_color_theme("green")
+customtkinter.set_default_color_theme("blue")
+
 
 customer_ids = []
-
+customer_names = []
 def refresh():
     customer_ids = cust.customer_refresh()
     print(customer_ids)
+    for id in customer_ids:
+        customer_data = cust.customer_load(id)
+        customer_name = customer_data.get("Customer Name")
+        customer_names.append(customer_name)
+
+    print(customer_names)
+
 
 
 def new():
     pass
 
 def edit():
-    json = cust.customer_load(1)
-    pprint.pprint(json)
+
 
 
 class MyFrame(customtkinter.CTkFrame):
@@ -34,19 +41,36 @@ class MyFrame(customtkinter.CTkFrame):
         self.edit = customtkinter.CTkButton(master=self, command=edit, text="Edit Customer")
         self.edit.grid(row=2, column=0, padx=20, pady=20)
 
-class SelectorFrame(customtkinter.CTkScrollableFrame):
+class Selector(customtkinter.CTkComboBox):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
-        row_count = 0
-        customer_ids = cust.customer_refresh()
-        for id_num in customer_ids:
-            customer_data = cust.customer_load(id_num)
-            if customer_data is not None:
-                cust_name = customer_data.get("Customer Name")
-                self.customer = customtkinter.CTkButton(master=self, text=cust_name)
-                self.customer.grid(row=row_count, column=0, padx=20,pady=20)
-                row_count = row_count + 1
 
+
+
+
+class Notebook(customtkinter.CTkTabview):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # create tabs
+        self.add("Utility")
+        self.add("Kunden")
+
+        # add widgets on tabs
+        self.my_frame = MyFrame(master=self.tab("Utility"))
+        self.my_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ns")
+
+        customer_ids = cust.customer_refresh()
+        for id in customer_ids:
+            customer_data = cust.customer_load(id)
+            customer_name = customer_data.get("Customer Name")
+            customer_names.append(customer_name)
+        self.selector = customtkinter.CTkComboBox(master=self.tab("Kunden"), values=customer_names, state="readonly")
+        self.selector.grid(row=0, column=0, padx=10, pady=10)
+        self.edit = customtkinter.CTkButton(master=self.tab("Kunden"),command=edit, text="Bearbeiten")
+        self.edit.grid(row=3, column=0,padx=10, pady=10)
+        self.create = customtkinter.CTkButton(master=self.tab("Kunden"), command=new, text="Neuer Eintrag")
+        self.create.grid(row=3, column=1, padx=10, pady=10)
 
 
 class App(customtkinter.CTk):
@@ -60,14 +84,13 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(2, weight=1)
         self.grid_columnconfigure(2, weight=5)
 
+        self.tab_view = Notebook(master=self)
+        self.tab_view.grid(row=0,column=0,padx=20,pady=20,sticky="nswe")
 
 
-        self.my_frame = MyFrame(master=self)
-        self.my_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
-
-        self.custframe = SelectorFrame(master=self)
-        self.custframe.grid(row=0, column=1, padx=10, pady=10,sticky="n")
 
 
 app = App()
+app.title('Salon am Bankplatz')
+app.iconbitmap(r'data/appdata/icon_app.ico')
 app.mainloop()
