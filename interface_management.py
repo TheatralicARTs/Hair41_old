@@ -52,9 +52,13 @@ class SelectorFrame(customtkinter.CTkScrollableFrame):
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        self.geometry("400x200")
+        self.geometry("1800x1280")
         self.grid_rowconfigure(0, weight=1)  # configure grid system
-        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_columnconfigure(2, weight=5)
 
 
 
@@ -62,7 +66,7 @@ class App(customtkinter.CTk):
         self.my_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
 
         self.custframe = SelectorFrame(master=self)
-        self.custframe.grid(row=0, column=1, padx=10, pady=10, sticky="nsw")
+        self.custframe.grid(row=0, column=1, padx=10, pady=10,sticky="n")
 
 
 app = App()
