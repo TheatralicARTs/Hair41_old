@@ -4,18 +4,19 @@ from tkinter import *
 import customtkinter
 import costumer_management as cust
 import datetime
+import json
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("green")
 
 customer_ids = []
 customer_names = []
-Kunde = "K"
-Telefon = "T"
-Mobil = "0151/1"
-Letzer_Termin = "Unix"
-Mitarbeiter = "Sanel"
-Service = "absbc"
+Kunde = "Leer"
+Telefon = "Leer"
+Mobil = "Leer"
+Letzer_Termin = "Leer"
+Mitarbeiter = "Leer"
+Service = "Leer"
 
 
 def refresh():
@@ -47,9 +48,9 @@ def display(customer_name):
             Telefon = customer_data.get("Customer_Phone")
             Mobil = customer_data.get("Customer_Mobile")
             Letzer_Termin = customer_data.get("Last_Sessions")
-            Mitarbeiter = customer_data.get("Employee Name")
+            Mitarbeiter = customer_data.get("Employee_Name")
             Service = customer_data.get("Treatment")
-            customer_number = customer_data.get("Customer Number")
+            customer_number = customer_data.get("Customer_Number")
             # MyTextbox.insert(0.0, "New Text")
             print(Kunde, Telefon, Mobil, Letzer_Termin, Mitarbeiter, Service)
 
@@ -71,12 +72,10 @@ class MyFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         # add widgets onto the frame, for example:
-        self.refresh = customtkinter.CTkButton(master=self, command=refresh, text="Refresh")
+        self.refresh = customtkinter.CTkButton(master=self, command=refresh, text="Refresh", anchor=tkinter.CENTER)
         self.refresh.grid(row=0, column=0, padx=20, pady=20)
-        self.new = customtkinter.CTkButton(master=self, command=new, text="New Customer")
-        self.new.grid(row=1, column=0, padx=20, pady=20)
-        self.edit = customtkinter.CTkButton(master=self, command=edit, text="Edit Customer")
-        self.edit.grid(row=2, column=0, padx=20, pady=20)
+
+
 
 
 class MyTextbox(customtkinter.CTkTextbox):
@@ -95,13 +94,11 @@ class MyTextbox(customtkinter.CTkTextbox):
 
 class Notebook(customtkinter.CTkTabview):
 
-    def save(self, name, tel, mob, date, emp, ser):
-        print(name, tel, mob, date, emp, ser)
-        pass
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
         # create tabs
+
         self.add("Utility")
         self.add("Kunden")
         self.add("Neuer Kunde")
@@ -131,7 +128,6 @@ class Notebook(customtkinter.CTkTabview):
         global textbox
         textbox = self.textbox
 
-
         entry_name = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
                                             placeholder_text="Name",
                                             width=200,
@@ -141,19 +137,19 @@ class Notebook(customtkinter.CTkTabview):
         entry_name.place(relx=0.5, rely=0.15, anchor=tkinter.CENTER)
 
         entry_tel = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
-                                            placeholder_text="Telefon",
-                                            width=200,
-                                            height=25,
-                                            border_width=2,
-                                            corner_radius=10)
+                                           placeholder_text="Telefon",
+                                           width=200,
+                                           height=25,
+                                           border_width=2,
+                                           corner_radius=10)
         entry_tel.place(relx=0.5, rely=0.25, anchor=tkinter.CENTER)
 
         entry_mob = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
-                                            placeholder_text="Handy",
-                                            width=200,
-                                            height=25,
-                                            border_width=2,
-                                            corner_radius=10)
+                                           placeholder_text="Handy",
+                                           width=200,
+                                           height=25,
+                                           border_width=2,
+                                           corner_radius=10)
         entry_mob.place(relx=0.5, rely=0.35, anchor=tkinter.CENTER)
 
         entry_last = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
@@ -165,11 +161,11 @@ class Notebook(customtkinter.CTkTabview):
         entry_last.place(relx=0.5, rely=0.45, anchor=tkinter.CENTER)
 
         entry_emp = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
-                                            placeholder_text="Mitarbeiter",
-                                            width=200,
-                                            height=25,
-                                            border_width=2,
-                                            corner_radius=10)
+                                           placeholder_text="Mitarbeiter",
+                                           width=200,
+                                           height=25,
+                                           border_width=2,
+                                           corner_radius=10)
         entry_emp.place(relx=0.5, rely=0.55, anchor=tkinter.CENTER)
 
         entry_serv = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
@@ -179,16 +175,22 @@ class Notebook(customtkinter.CTkTabview):
                                             border_width=2,
                                             corner_radius=10)
         entry_serv.place(relx=0.5, rely=0.75, anchor=tkinter.CENTER)
-        name = entry_name.get()
-        tel = entry_tel.get()
-        mob = entry_mob.get()
-        date = entry_last.get()
-        emp = entry_emp.get()
-        ser = entry_serv.get
 
-        #entry_save = customtkinter.CTkButton(self, text="Speichern", command=Notebook.save(name, tel, mob, date, emp, ser))
-        #entry_save.grid(row=1,column=1)
 
+        def submit():
+            name = entry_name.get()
+            tel = entry_tel.get()
+            mob = entry_mob.get()
+            date = entry_last.get()
+            emp = entry_emp.get()
+            ser = entry_serv.get()
+            print(name, tel, mob, date, emp, ser)
+            cust.customer_new(name, tel, mob, date, emp, ser)
+
+
+
+        entry_save = customtkinter.CTkButton(self.tab("Neuer Kunde"), text="Speichern",command=submit)
+        entry_save.grid(row=1, column=1,sticky="s")
 
 
 class App(customtkinter.CTk):
@@ -206,8 +208,8 @@ class App(customtkinter.CTk):
         self.tab_view.grid(row=0, column=0, padx=20, pady=20, sticky="nswe")
 
 
+
 app = App()
 app.title('Salon am Bankplatz')
 app.iconbitmap(r'data/appdata/icon_app.ico')
 app.mainloop()
-

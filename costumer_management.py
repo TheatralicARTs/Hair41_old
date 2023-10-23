@@ -60,18 +60,13 @@ def get_next_customer_number():
     # Define the path to the "data/customers" folder
     data_folder = os.path.join(os.path.dirname(__file__), 'data', 'customers')
 
-    # Get a list of JSON files in the folder
+    # Get the list of files in the folder with '.json' extension
     json_files = [file for file in os.listdir(data_folder) if file.endswith('.json')]
 
-    # Extract customer numbers from JSON filenames
-    customer_numbers = [int(json_file.split("customer")[1].split(".json")[0]) for json_file in json_files]
-
-    # Find the next available customer number
-    for i in range(1, 10000):
-        if i not in customer_numbers:
-            return f'{i:04d}'  # Format the number as '0001', '0002', ...
-
-    return None  # Return None if no available customer number is found
+    # Calculate the next customer number
+    next_customer_number = len(json_files) + 1
+    print("Key=" + str(next_customer_number))
+    return next_customer_number  # Format as '0001', '0002', etc.
 
 
 def customer_new(customer_name, customer_phone, customer_mobile, last_sessions, employee_name, treatment):
@@ -88,17 +83,17 @@ def customer_new(customer_name, customer_phone, customer_mobile, last_sessions, 
         raise Exception("No available customer numbers.")
 
     # Construct the JSON file path based on the customer number
-    json_file_path = os.path.join(data_folder, f'customer{customer_number}.json')
+    json_file_path = os.path.join(data_folder, f'{customer_number}.json')
 
     # Create customer data dictionary
     customer_data = {
-        "Customer Name": customer_name,
-        "Customer Phone": customer_phone,
-        "Customer Mobile": customer_mobile,
-        "Last Sessions": last_sessions,
-        "Employee Name": employee_name,
+        "Customer_Name": customer_name,
+        "Customer_Phone": customer_phone,
+        "Customer_Mobile": customer_mobile,
+        "Last_Sessions": last_sessions,
+        "Employee_Name": employee_name,
         "Treatment": treatment,
-        "Customer Number": customer_number
+        "Customer_Number": customer_number
     }
 
     # Write customer data to JSON file
