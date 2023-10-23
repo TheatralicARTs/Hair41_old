@@ -5,8 +5,8 @@ import customtkinter
 import costumer_management as cust
 import datetime
 
-customtkinter.set_appearance_mode("light")
-customtkinter.set_default_color_theme("blue")
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("green")
 
 customer_ids = []
 customer_names = []
@@ -131,8 +131,6 @@ class Notebook(customtkinter.CTkTabview):
         global textbox
         textbox = self.textbox
 
-        self.create = customtkinter.CTkButton(master=self.tab("Kunden"), command=new, text="Neuer Eintrag")
-        self.create.grid(row=3, column=1, padx=10, pady=10)
 
         entry_name = customtkinter.CTkEntry(master=self.tab("Neuer Kunde"),
                                             placeholder_text="Name",
@@ -188,8 +186,8 @@ class Notebook(customtkinter.CTkTabview):
         emp = entry_emp.get()
         ser = entry_serv.get
 
-        entry_save = customtkinter.CTkButton(self, text="Speichern", command=Notebook.save(name, tel, mob, date, emp, ser))
-
+        #entry_save = customtkinter.CTkButton(self, text="Speichern", command=Notebook.save(name, tel, mob, date, emp, ser))
+        #entry_save.grid(row=1,column=1)
 
 
 
