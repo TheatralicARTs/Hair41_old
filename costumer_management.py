@@ -3,16 +3,15 @@ import os
 
 
 def customer_load(customer_number):
-    data_folder = 'data/customers'
-    customer_file = os.path.join(data_folder, f"{customer_number}.json")
+    file_path = os.path.join('data', 'customers', f"{customer_number}.json")
 
-    if not os.path.exists(customer_file):
-        return None  # Return None if the file doesn't exist
+    try:
+        with open(file_path, 'r') as file:
+            customer_data = json.load(file)
+            return customer_data
+    except FileNotFoundError:
+        return None
 
-    with open(customer_file, 'r') as file:
-        customer_data = json.load(file)
-
-    return customer_data
 
 
 def customer_edit(customer_id, data_name, new_value):
