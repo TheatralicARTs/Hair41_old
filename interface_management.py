@@ -3,6 +3,7 @@ import tkinter as tkinter
 from tkinter import *
 import customtkinter
 import costumer_management as cust
+import datetime
 
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("blue")
@@ -10,6 +11,12 @@ customtkinter.set_default_color_theme("blue")
 
 customer_ids = []
 customer_names = []
+Kunde = "K"
+Telefon = "T"
+Mobil = "0151/1"
+Letzer_Termin = "Unix"
+Mitarbeiter =  "Sanel"
+Service = "absbc"
 def refresh():
     customer_ids = cust.customer_refresh()
     print(customer_ids)
@@ -26,6 +33,25 @@ def new():
     pass
 
 def edit():
+    pass
+
+
+
+def display(id):
+    cust.customer_refresh()
+    print(id)
+    customer_data = cust.customer_load(id)
+    if customer_data is not NONE:
+        Kunde = customer_data.get("Customer Name")
+        Telefon = customer_data.get("Customer Phone")
+        Mobil = customer_data.get("Customer Mobile")
+        Letzer_Termin = datetime.datetime.fromtimestamp(customer_data.get("Last Sessions"))
+        Mitarbeiter = customer_data.get("Treatment")
+        Service = customer_data.get("Customer Name")
+
+
+
+
 
 
 
@@ -41,10 +67,15 @@ class MyFrame(customtkinter.CTkFrame):
         self.edit = customtkinter.CTkButton(master=self, command=edit, text="Edit Customer")
         self.edit.grid(row=2, column=0, padx=20, pady=20)
 
-class Selector(customtkinter.CTkComboBox):
+class MyTextbox(customtkinter.CTkTextbox):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
-
+        self.insert("1.0", "Kunde: " + Kunde + '\n\n')
+        self.insert("2.0", "Telefon: " + Telefon + '\n\n')
+        self.insert("3.0", "Mobil: " + Mobil + '\n\n')
+        self.insert("4.0", "Letzer Termin: " + Letzer_Termin + '\n\n')
+        self.insert("5.0", "Mitarbeiter: " + Mitarbeiter + '\n\n')
+        self.insert("6.0", "Service: " + Service + '\n\n')
 
 
 
@@ -65,8 +96,12 @@ class Notebook(customtkinter.CTkTabview):
             customer_data = cust.customer_load(id)
             customer_name = customer_data.get("Customer Name")
             customer_names.append(customer_name)
-        self.selector = customtkinter.CTkComboBox(master=self.tab("Kunden"), values=customer_names, state="readonly")
+        self.selector = customtkinter.CTkComboBox(master=self.tab("Kunden"), values=customer_names, state="readonly",command=display)
         self.selector.grid(row=0, column=0, padx=10, pady=10)
+
+        self.textbox = MyTextbox(master=self.tab("Kunden"), width=600, corner_radius=10)
+        self.textbox.grid(row=2, column=0)
+
         self.edit = customtkinter.CTkButton(master=self.tab("Kunden"),command=edit, text="Bearbeiten")
         self.edit.grid(row=3, column=0,padx=10, pady=10)
         self.create = customtkinter.CTkButton(master=self.tab("Kunden"), command=new, text="Neuer Eintrag")
@@ -94,3 +129,4 @@ app = App()
 app.title('Salon am Bankplatz')
 app.iconbitmap(r'data/appdata/icon_app.ico')
 app.mainloop()
+
