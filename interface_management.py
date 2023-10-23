@@ -53,12 +53,12 @@ def display(customer_name):
             print(Kunde,Telefon,Mobil,Letzer_Termin,Mitarbeiter,Service)
 
 
-            MyTextbox.insert("1.0", "Kunde: " + Kunde + '\n\n')
-            MyTextbox.insert("2.0", "Telefon: " + str(Telefon) + '\n\n')
-            MyTextbox.insert("3.0", "Mobil: " + str(Mobil) + '\n\n')
-            MyTextbox.insert("4.0", "Letzer Termin: " + str(Letzer_Termin) + '\n\n')
-            MyTextbox.insert("5.0", "Mitarbeiter: " + Mitarbeiter + '\n\n')
-            MyTextbox.insert("6.0", "Service: " + Service + '\n\n' )
+            MyTextbox.insert("1.0","6.0", "Kunde: " + Kunde + '\n\n')
+            MyTextbox.insert("2.0","6.0", "Telefon: " + str(Telefon) + '\n\n')
+            MyTextbox.insert("3.0","6.0", "Mobil: " + str(Mobil) + '\n\n')
+            MyTextbox.insert("4.0","6.0", "Letzer Termin: " + str(Letzer_Termin) + '\n\n')
+            MyTextbox.insert("5.0","6.0", "Mitarbeiter: " + Mitarbeiter + '\n\n')
+            MyTextbox.insert("6.0","6.0", "Service: " + Service + '\n\n' )
 
             # Return the variables
             return customer_number
@@ -113,9 +113,9 @@ class Notebook(customtkinter.CTkTabview):
         self.selector = customtkinter.CTkComboBox(master=self.tab("Kunden"), values=customer_names, state="readonly",command=display)
         self.selector.grid(row=0, column=0, padx=10, pady=10)
 
-        while TRUE:
-            self.textbox = MyTextbox(master=self.tab("Kunden"), width=600, corner_radius=10)
-            self.textbox.grid(row=2, column=0)
+
+        self.textbox = MyTextbox(master=self.tab("Kunden"), width=600, corner_radius=10)
+        self.textbox.grid(row=2, column=0)
 
         self.edit = customtkinter.CTkButton(master=self.tab("Kunden"),command=edit, text="Bearbeiten")
         self.edit.grid(row=3, column=0,padx=10, pady=10)
