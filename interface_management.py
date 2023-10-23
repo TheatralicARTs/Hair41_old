@@ -22,7 +22,7 @@ def refresh():
     print(customer_ids)
     for id in customer_ids:
         customer_data = cust.customer_load(id)
-        customer_name = customer_data.get("Customer Name")
+        customer_name = customer_data.get("Customer_Name")
         customer_names.append(customer_name)
 
     print(customer_names)
@@ -37,17 +37,31 @@ def edit():
 
 
 
-def display(id):
-    cust.customer_refresh()
-    print(id)
-    customer_data = cust.customer_load(id)
-    if customer_data is not NONE:
-        Kunde = customer_data.get("Customer Name")
-        Telefon = customer_data.get("Customer Phone")
-        Mobil = customer_data.get("Customer Mobile")
-        Letzer_Termin = datetime.datetime.fromtimestamp(customer_data.get("Last Sessions"))
-        Mitarbeiter = customer_data.get("Treatment")
-        Service = customer_data.get("Customer Name")
+def display(customer_name):
+    customer_ids = cust.customer_refresh()
+    for customer_id in customer_ids:
+        customer_data = cust.customer_load(customer_id)
+        if customer_data is not None and customer_data.get("Customer_Name") == customer_name:
+            # Initialize variables with the same names as the keys
+            Kunde = customer_data.get("Customer_Name")
+            Telefon = customer_data.get("Customer_Phone")
+            Mobil = customer_data.get("Customer_Mobile")
+            Letzer_Termin = customer_data.get("Last_Sessions")
+            Mitarbeiter = customer_data.get("Employee Name")
+            Service = customer_data.get("Treatment")
+            customer_number = customer_data.get("Customer Number")
+            print(Kunde,Telefon,Mobil,Letzer_Termin,Mitarbeiter,Service)
+
+
+            MyTextbox.insert("1.0", "Kunde: " + Kunde + '\n\n')
+            MyTextbox.insert("2.0", "Telefon: " + str(Telefon) + '\n\n')
+            MyTextbox.insert("3.0", "Mobil: " + str(Mobil) + '\n\n')
+            MyTextbox.insert("4.0", "Letzer Termin: " + str(Letzer_Termin) + '\n\n')
+            MyTextbox.insert("5.0", "Mitarbeiter: " + Mitarbeiter + '\n\n')
+            MyTextbox.insert("6.0", "Service: " + Service + '\n\n' )
+
+            # Return the variables
+            return customer_number
 
 
 
@@ -94,13 +108,14 @@ class Notebook(customtkinter.CTkTabview):
         customer_ids = cust.customer_refresh()
         for id in customer_ids:
             customer_data = cust.customer_load(id)
-            customer_name = customer_data.get("Customer Name")
+            customer_name = customer_data.get("Customer_Name")
             customer_names.append(customer_name)
         self.selector = customtkinter.CTkComboBox(master=self.tab("Kunden"), values=customer_names, state="readonly",command=display)
         self.selector.grid(row=0, column=0, padx=10, pady=10)
 
-        self.textbox = MyTextbox(master=self.tab("Kunden"), width=600, corner_radius=10)
-        self.textbox.grid(row=2, column=0)
+        while TRUE:
+            self.textbox = MyTextbox(master=self.tab("Kunden"), width=600, corner_radius=10)
+            self.textbox.grid(row=2, column=0)
 
         self.edit = customtkinter.CTkButton(master=self.tab("Kunden"),command=edit, text="Bearbeiten")
         self.edit.grid(row=3, column=0,padx=10, pady=10)
